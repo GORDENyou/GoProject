@@ -1,17 +1,25 @@
 package p.gordenyou.golibrary.log;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * GoLog 对外接口
  * Tips:
- *  1. 打印堆栈信息
- *  2. File输出
- *  3. 模拟控制台
+ * 1. 打印堆栈信息
+ * 2. File输出
+ * 3. 模拟控制台
  */
 public class GoLog {
+    private static final String GO_LOG_PACKAGE;
+
+    static {
+        String className = GoLog.class.getName();
+        GO_LOG_PACKAGE = className.substring(0, className.lastIndexOf('.') + 1);
+    }
+
     public static void v(Object... contents) {
         log(GoLogType.V, contents);
     }
@@ -87,12 +95,36 @@ public class GoLog {
         }
 
         StringBuilder sb = new StringBuilder();
-        String body = parseBody(contents);
+        /*
+        我们需要查看是否含有线程和堆栈的信息，若有，需要添加进去
+         */
+        if (config.includeThread()) {
+            String threadInfo = GoLogConfig.GO_THREAD_FORMATTER.format(Thread.currentThread());
+            sb.append(threadInfo).append("\n");
+        }
+        if (config.stackTraceDepth() > 0) {
+            String traceInfo = GoLogConfig.GO_STACK_TRACE_FORMATTER.format(GoStackTraceUtil.getCroppedRealStackTrace(new Throwable().getStackTrace(), GO_LOG_PACKAGE, config.stackTraceDepth()));
+            sb.append(traceInfo).append("\n");
+        }
+
+        String body = parseBody(contents, config);
         sb.append(body);
-        Log.println(type, tag, body);
+        List<GoLogPrinter> printers = config.getPrinters() != null ? Arrays.asList(config.getPrinters()) : GoLogManager.getInstance().getPrinters();
+
+        if (printers == null) return;
+        else {
+            for (GoLogPrinter printer : printers) {
+                printer.print(config, type, tag, sb.toString());
+            }
+        }
     }
 
-    private static String parseBody(Object[] contents) {
+    private static String parseBody(Object[] contents, GoLogConfig config) {
+        // 当 contents 为对象时，我们需要将其序列化
+        if (config.injectJsonParser() != null) {
+            return config.injectJsonParser().toJson(contents);
+        }
+
         StringBuilder sb = new StringBuilder();
         for (Object content : contents) {
             sb.append(content.toString()).append(";");
