@@ -1,0 +1,3 @@
+include ':golibrary'
+include ':app'
+rootProject.name = "MoocProject"
