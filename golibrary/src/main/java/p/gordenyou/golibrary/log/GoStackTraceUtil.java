@@ -26,7 +26,7 @@ public class GoStackTraceUtil {
     /**
      * 裁剪堆栈信息
      *
-     * @param callStack 初试堆栈信息
+     * @param callStack 初始堆栈信息
      * @param maxDepth  堆栈最大深度
      * @return 裁剪后的堆栈
      */
