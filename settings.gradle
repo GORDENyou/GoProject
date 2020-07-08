@@ -1,3 +1,4 @@
+include ':goui'
 include ':golibrary'
 include ':app'
 rootProject.name = "GoProject"
