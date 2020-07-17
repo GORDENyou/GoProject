@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.ColorInt;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import p.gordenyou.goui.R;
 import p.gordenyou.goui.tab.common.IGoTab;
@@ -132,7 +133,7 @@ public class GoTabBottom extends RelativeLayout implements IGoTab<GoTabBottomInf
     }
 
     @Override
-    public void onTabSelectedChange(int index, @NotNull GoTabBottomInfo<?> prevInfo, @NotNull GoTabBottomInfo<?> nextInfo) {
+    public void onTabSelectedChange(int index, @Nullable GoTabBottomInfo<?> prevInfo, @NotNull GoTabBottomInfo<?> nextInfo) {
         if (prevInfo != tabInfo && nextInfo != tabInfo || prevInfo == nextInfo) {
             return;
         }

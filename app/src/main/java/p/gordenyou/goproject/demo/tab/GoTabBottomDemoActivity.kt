@@ -1,8 +1,10 @@
 package p.gordenyou.goproject.demo.tab
 
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import p.gordenyou.golibrary.util.GoDisplayUtil
 import p.gordenyou.goproject.R
 import p.gordenyou.goui.tab.bottom.GoTabBottomInfo
 import p.gordenyou.goui.tab.bottom.GoTabBottomLayout
@@ -35,21 +37,21 @@ class GoTabBottomDemoActivity : AppCompatActivity() {
             "#ffd44949"
         )
 
-        val infoCategory = GoTabBottomInfo(
-            "分类",
-            "fonts/iconfont.ttf",
-            getString(R.string.if_category),
-            null,
-            "#ff656667",
-            "#ffd44949"
-        )
-//        val bitmap = BitmapFactory.decodeResource(resources, R.drawable.fire, null)
-//
-//        val infoCategory = GoTabBottomInfo<String>(
+//        val infoCategory = GoTabBottomInfo(
 //            "分类",
-//            bitmap,
-//            bitmap
+//            "fonts/iconfont.ttf",
+//            getString(R.string.if_category),
+//            null,
+//            "#ff656667",
+//            "#ffd44949"
 //        )
+        val bitmap = BitmapFactory.decodeResource(resources, R.drawable.fire, null)
+
+        val infoCategory = GoTabBottomInfo<String>(
+            "分类",
+            bitmap,
+            bitmap
+        )
         val infoChat = GoTabBottomInfo(
             "推荐",
             "fonts/iconfont.ttf",
@@ -83,6 +85,9 @@ class GoTabBottomDemoActivity : AppCompatActivity() {
         }
 
         goTabBottomLayout.defaultSelected(homeInfo)
+
+        val tabBottom = goTabBottomLayout.findTab(bottomInfoList[2])
+        tabBottom?.apply { resetHeight(GoDisplayUtil.dp2px(66f, resources)) }
     }
 
 }
