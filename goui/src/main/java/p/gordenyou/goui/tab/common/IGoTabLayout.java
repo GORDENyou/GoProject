@@ -3,6 +3,7 @@ package p.gordenyou.goui.tab.common;
 import android.view.ViewGroup;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -14,13 +15,13 @@ public interface IGoTabLayout<Tab extends ViewGroup, D> {
     Tab findTab(@NotNull D data);
 
     // 添加监听器
-    void addTabSelectedChangeListener(onTabSelectedListener<D> listener);
+    void addTabSelectedChangeListener(OnTabSelectedListener<D> listener);
 
     void defaultSelected(@NotNull D defaultInfo);
 
     void inflateInfo(@NotNull List<D> infoList);
 
-    interface onTabSelectedListener<D> {
-        void onTabSelectedChange(int index, @NotNull D prevInfo, @NotNull D nextInfo);
+    interface OnTabSelectedListener<D> {
+        void onTabSelectedChange(int index, @Nullable D prevInfo, @NotNull D nextInfo);
     }
 }

@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -35,6 +36,22 @@ public class GoTabBottom extends RelativeLayout implements IGoTab<GoTabBottomInf
     public GoTabBottom(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
+    }
+
+    public GoTabBottomInfo<?> getTabInfo() {
+        return tabInfo;
+    }
+
+    public ImageView getTabImageView() {
+        return tabImageView;
+    }
+
+    public TextView getTabIconView() {
+        return tabIconView;
+    }
+
+    public TextView getTabNameView() {
+        return tabNameView;
     }
 
     private void init() {
@@ -79,17 +96,19 @@ public class GoTabBottom extends RelativeLayout implements IGoTab<GoTabBottomInf
                 tabIconView.setTextColor(getTextColor(tabInfo.defaultColor));
                 tabNameView.setTextColor(getTextColor(tabInfo.defaultColor));
             }
-        } else if(tabInfo.tabType == GoTabBottomInfo.TabType.BITMAP){
-            if(init){
+        } else if (tabInfo.tabType == GoTabBottomInfo.TabType.BITMAP) {
+            if (init) {
                 tabIconView.setVisibility(GONE);
                 tabImageView.setVisibility(VISIBLE);
-                if(TextUtils.isEmpty(tabInfo.name)){
+                if (TextUtils.isEmpty(tabInfo.name)) {
                     tabNameView.setText(tabInfo.name);
                 }
             }
 
-            if(selected){
-                // todo
+            if (selected) {
+                tabImageView.setImageBitmap(tabInfo.selectedBitmap);
+            } else {
+                tabImageView.setImageBitmap(tabInfo.defaultBitmap);
             }
         }
     }
@@ -103,13 +122,26 @@ public class GoTabBottom extends RelativeLayout implements IGoTab<GoTabBottomInf
         }
     }
 
+    // 重新设置某个 Tab 的高度
     @Override
     public void resetHeight(int height) {
-
+        ViewGroup.LayoutParams layoutParams = getLayoutParams();
+        layoutParams.height = height;
+        setLayoutParams(layoutParams);
+        getTabNameView().setVisibility(GONE);
     }
 
     @Override
     public void onTabSelectedChange(int index, @NotNull GoTabBottomInfo<?> prevInfo, @NotNull GoTabBottomInfo<?> nextInfo) {
+        if (prevInfo != tabInfo && nextInfo != tabInfo || prevInfo == nextInfo) {
+            return;
+        }
 
+        // todo 这里其实没有理解什么意思
+        if (prevInfo == tabInfo) {
+            inflateInfo(false, false);
+        } else {
+            inflateInfo(true, false);
+        }
     }
 }
