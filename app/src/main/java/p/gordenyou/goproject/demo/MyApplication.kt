@@ -1,4 +1,4 @@
-package p.gordenyou.goproject
+package p.gordenyou.goproject.demo
 
 import android.app.Application
 import com.google.gson.Gson
