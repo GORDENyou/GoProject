@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import p.gordenyou.goproject.R
 import p.gordenyou.goproject.demo.tab.GoTabBottomDemoActivity
+import p.gordenyou.goproject.demo.tab.GoTabTopDemoActivity
 
 class TestActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,6 +22,9 @@ class TestActivity : AppCompatActivity() {
             }
             R.id.tv_bottom -> {
                 startActivity(Intent(this, GoTabBottomDemoActivity::class.java))
+            }
+            R.id.tv_top -> {
+                startActivity(Intent(this, GoTabTopDemoActivity::class.java))
             }
         }
     }

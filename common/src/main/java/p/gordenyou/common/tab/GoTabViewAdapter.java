@@ -11,7 +11,7 @@ import java.util.List;
 import p.gordenyou.goui.tab.bottom.GoTabBottomInfo;
 
 /**
- * 配合，完成对 Fragment 的管理
+ * 配合 GoFragmentTabView，完成对 Fragment 的管理
  */
 public class GoTabViewAdapter {
     // 持有一个底部 Tab 列表

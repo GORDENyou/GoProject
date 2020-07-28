@@ -1,9 +1,11 @@
 package p.gordenyou.goproject.logic;
 
 import android.content.res.Resources;
+import android.os.Bundle;
 import android.view.View;
 
 import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.fragment.app.FragmentManager;
 
@@ -31,10 +33,19 @@ public class MainActivityLogic {
     private List<GoTabBottomInfo<?>> infoList;
     private ActivityProvider activityProvider;
     private int currentItemIndex;
+    private final static String SAVED_CURRENT_ID = "SAVED_CURRENT_ID";
 
-    public MainActivityLogic(ActivityProvider activityProvider) {
+    public MainActivityLogic(ActivityProvider activityProvider, Bundle savedInstanceState) {
         this.activityProvider = activityProvider;
+        // 修复 “不保留活动选项” 导致的 fragment 重叠问题（原因：Activity 被回收，而 fragment 没有被回收）
+        if(savedInstanceState != null){
+            currentItemIndex = savedInstanceState.getInt(SAVED_CURRENT_ID);
+        }
         initTabBottom();
+    }
+
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putInt(SAVED_CURRENT_ID, currentItemIndex);
     }
 
     public GoFragmentTabView getFragmentTabView() {
@@ -111,10 +122,14 @@ public class MainActivityLogic {
         goTabBottomLayout.addTabSelectedChangeListener(new IGoTabLayout.OnTabSelectedListener<GoTabBottomInfo<?>>() {
             @Override
             public void onTabSelectedChange(int index, @Nullable GoTabBottomInfo<?> prevInfo, @NotNull GoTabBottomInfo<?> nextInfo) {
+                // 我们通过 fragmentTabView 实现对 fragment 的管理。
                 fragmentTabView.setCurrentItem(index);
+
+                // 记录当前的选中的 fragment 的序号
+                MainActivityLogic.this.currentItemIndex = index;
             }
         });
-        goTabBottomLayout.defaultSelected(homeInfo);
+        goTabBottomLayout.defaultSelected(infoList.get(currentItemIndex));
 
     }
 
